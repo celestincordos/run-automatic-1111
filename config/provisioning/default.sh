@@ -8,22 +8,18 @@
 
 DISK_GB_REQUIRED=30
 
-STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_diva.csv"
-STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_twri.csv"
-STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_mre.csv"
-STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_marc_k3nt3l.csv"
-STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_fooocus.csv"
-STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_sai.csv"
+STYLES=(
+    "https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/styles.csv"
 )
 
 MAMBA_PACKAGES=(
     #"package1"
     "package2=version"
-  )
-  
+)
+
 PIP_PACKAGES=(
     "bitsandbytes==0.41.2.post2"
-  )
+)
 
 EXTENSIONS=(
     "https://github.com/Mikubill/sd-webui-controlnet"
@@ -82,7 +78,6 @@ CONTROLNET_MODELS=(
     #"https://huggingface.co/webui/ControlNet-modules-safetensors/resolve/main/t2iadapter_style-fp16.safetensors"
 )
 
-
 ### DO NOT EDIT BELOW HERE UNLESS YOU KNOW WHAT YOU ARE DOING ###
 
 function provisioning_start() {
@@ -94,6 +89,9 @@ function provisioning_start() {
     provisioning_get_mamba_packages
     provisioning_get_pip_packages
     provisioning_get_extensions
+    provisioning_get_models \
+        "${WORKSPACE}/storage/stable_diffusion" \
+        "${STYLES[@]}"
     provisioning_get_models \
         "${WORKSPACE}/storage/stable_diffusion/models/ckpt" \
         "${CHECKPOINT_MODELS[@]}"
@@ -109,18 +107,18 @@ function provisioning_start() {
     provisioning_get_models \
         "${WORKSPACE}/storage/stable_diffusion/models/esrgan" \
         "${ESRGAN_MODELS[@]}"
-     
+
     PLATFORM_FLAGS=""
     if [[ $XPU_TARGET = "CPU" ]]; then
         PLATFORM_FLAGS="--use-cpu all --skip-torch-cuda-test --no-half"
     fi
     PROVISIONING_FLAGS="--skip-python-version-check --no-download-sd-model --do-not-download-clip --port 11404 --exit"
     FLAGS_COMBINED="${PLATFORM_FLAGS} $(cat /etc/a1111_webui_flags.conf) ${PROVISIONING_FLAGS}"
-    
+
     # Start and exit because webui will probably require a restart
-    cd /opt/stable-diffusion-webui && \
-    micromamba run -n webui -e LD_PRELOAD=libtcmalloc.so python launch.py \
-        ${FLAGS_COMBINED}
+    cd /opt/stable-diffusion-webui &&
+        micromamba run -n webui -e LD_PRELOAD=libtcmalloc.so python launch.py \
+            ${FLAGS_COMBINED}
     provisioning_print_end
 }
 
@@ -144,7 +142,7 @@ function provisioning_get_extensions() {
         if [[ -d $path ]]; then
             if [[ ${AUTO_UPDATE,,} != "false" ]]; then
                 printf "Updating extension: %s...\n" "${repo}"
-                ( cd "$path" && git pull )
+                (cd "$path" && git pull)
                 if [[ -e $requirements ]]; then
                     micromamba -n webui run ${PIP_INSTALL} -r "$requirements"
                 fi
@@ -170,7 +168,7 @@ function provisioning_get_models() {
         printf "WARNING: Low disk space allocation - Only the first model will be downloaded!\n"
         arr=("$1")
     fi
-    
+
     printf "Downloading %s model(s) to %s...\n" "${#arr[@]}" "$dir"
     for url in "${arr[@]}"; do
         printf "Downloading: %s\n" "${url}"
