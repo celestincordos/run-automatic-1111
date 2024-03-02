@@ -8,6 +8,14 @@
 
 DISK_GB_REQUIRED=30
 
+STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_diva.csv"
+STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_twri.csv"
+STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_mre.csv"
+STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_marc_k3nt3l.csv"
+STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_fooocus.csv"
+STYLES=("https://raw.githubusercontent.com/celestincordos/run-automatic-1111/main/styles/sdxl_styles_sai.csv"
+)
+
 MAMBA_PACKAGES=(
     #"package1"
     "package2=version"
