@@ -32,12 +32,13 @@ EXTENSIONS=(
     "https://github.com/Coyote-A/ultimate-upscale-for-automatic1111"
     "https://github.com/fkunn1326/openpose-editor"
     "https://github.com/Gourieff/sd-webui-reactor"
+    "https://github.com/namkazt/sd-webui-prompt-history" # save history of prompts
 )
 
 CHECKPOINT_MODELS=(
-    "https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.ckpt"
+    # "https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.ckpt"
     #"https://huggingface.co/stabilityai/stable-diffusion-2-1/resolve/main/v2-1_768-ema-pruned.ckpt"
-    # "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors"
+    "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors"
     # "https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0.safetensors"
     "https://civitai.com/api/download/models/288982?type=Model&format=SafeTensor&size=full&fp=fp16"
 )
@@ -45,6 +46,9 @@ CHECKPOINT_MODELS=(
 LORA_MODELS=(
     "https://civitai.com/api/download/models/16576"
     "https://civitai.com/api/download/models/131991?type=Model&format=SafeTensor"
+    "https://civitai.com/api/download/models/151806?type=Model&format=SafeTensor"
+    "https://civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com/model/1269491/perfect20hands20v2.DQcT.safetensors?X-Amz-Expires=86400&response-content-disposition=attachment%3B%20filename%3D%22Perfect%20Hands%20v2.safetensors%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=e01358d793ad6966166af8b3064953ad/20240303/us-east-1/s3/aws4_request&X-Amz-Date=20240303T133636Z&X-Amz-SignedHeaders=host&X-Amz-Signature=b85ab98d1479eaec895d6d342594afb393168dc1216aace4b379f69fd4cbf9c0"
+    "https://civitai-delivery-worker-prod.5ac0637cfd0766c97916cefa3764fbdf.r2.cloudflarestorage.com/706737/model/bikini02Lora.2GAw.safetensors?X-Amz-Expires=86400&response-content-disposition=attachment%3B filename%3D%22Bikini_02_lora.safetensors%22&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=e01358d793ad6966166af8b3064953ad/20240303/us-east-1/s3/aws4_request&X-Amz-Date=20240303T132310Z&X-Amz-SignedHeaders=host&X-Amz-Signature=ad596090409983d4e3e94d53083583fb4c9bf871fe4e41c988906c2e40ca20e9"
 )
 
 VAE_MODELS=(
@@ -90,7 +94,7 @@ function provisioning_start() {
     provisioning_get_pip_packages
     provisioning_get_extensions
     provisioning_get_models \
-        "${WORKSPACE}/storage/stable_diffusion" \
+        "${WORKSPACE}/stable-diffusion-webui" \
         "${STYLES[@]}"
     provisioning_get_models \
         "${WORKSPACE}/storage/stable_diffusion/models/ckpt" \
